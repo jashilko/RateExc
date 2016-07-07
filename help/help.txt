@@ -1,0 +1,6 @@
+sudo pip install -U requests
+
+sudo pip install pyTelegramBotAPI
+
+sudo pip install virtualenv
+sudo pip install Flask 

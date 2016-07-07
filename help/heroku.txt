@@ -1,0 +1,12 @@
+token = '233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8' # Токер реальный
+
+Удаляем ставим хуки боту
+https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWebhook
+https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWebhook?url=https://rateexc-jashilko.c9users.io/bot
+
+Заливка на heroku
+git add .
+git commit -am "Заменяем токен с тестового на реальный"
+git push heroku master
+heroku logs
+heroku logs --tail
