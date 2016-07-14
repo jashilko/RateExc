@@ -1,5 +1,4 @@
 import shelve
-from config import shelve_status
 
 # Set to storage with name
 def set_storage(name, id, mes):

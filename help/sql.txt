@@ -1,0 +1,25 @@
+# Запускаем сервис postgresql
+    sudo service postgresql start
+# Входим в оболочку
+    psql
+# Создаем БД
+    create database ratedb;
+# Создаем пользователя
+    create user ratedb_user with password 'qwerty';
+ 
+# Даем пользователю права на базу
+    GRANT ALL privileges ON DATABASE ratedb TO ratedb_user;
+
+# Выходим из оболочки
+    \q
+
+# Входим в оболочку под созданным полдьзователем. 
+psql -h localhost ratedb ratedb_user
+
+# Создаем таблицы
+    CREATE SEQUENCE client_ids;
+    CREATE TABLE client (id INTEGER PRIMARY KEY DEFAULT NEXTVAL('client_ids'), username CHAR(64), first_name CHAR(64), last_name CHAR(64), phone_number CHAR(64));
+
+    CREATE SEQUENCE order_ids;
+    CREATE TABLE orders (id INTEGER PRIMARY KEY DEFAULT NEXTVAL('order_ids'), idclient INTEGER, cur VARCHAR(3), rate MONEY, VECTOR CHAR(5), volume INTEGER, summa MONEY, confirm SMALLINT);
+
