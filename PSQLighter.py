@@ -30,32 +30,42 @@ class PSQLighter:
 
     # Проверка клиента на существование.
     def check_exist_client(self, clientid):
-        cursor = self.connection.cursor()
-        cursor.execute('''SELECT count(*) FROM clients where Id = %s;'''%(clientid))
-        result = cursor.fetchone()      
-        count = result[0]
-        print ("res - " + str(result[0]))
-        if count > 0:
-            return True
-        else:
-            return  False
+        try:
+            if clientid is not None:
+                self.cursor.execute('''SELECT count(*) FROM client where id = %s;'''%(clientid))
+                result = self.cursor.fetchone()      
+                count = result[0]
+                print ('This client count ' + str(count))
+                if count > 0:
+                    return True
+                else:
+                    return  False
+            else:
+                return False
+        except Exception as e:
+            print("Ошибка check_exist_client: %s" %str(e))  
+        
             
     def close(self):
         """ Закрываем текущее соединение с БД """
         self.connection.close()     
         
+    # Пишем в базу номер клиента или самого клиента
     def set_client_phone(self,contact, username):
-        """
-        Добавляем телефон клиента
-        :param contact: Отправленный клиентом контакт
-        :param username: юзернейм клиента
-        """
-        with self.connection:
+        try:
+            """
+            Добавляем телефон клиента
+            :param contact: Отправленный клиентом контакт
+            :param username: юзернейм клиента
+            """
             if self.check_exist_client(contact.user_id):
-                self.cursor.execute('''UPDATE clients SET phone_number = \'%s\' WHERE Id = %s;'''%(contact.phone_number, contact.user_id))
+                self.cursor.execute('''UPDATE client SET phone_number = \'%s\' WHERE id = %s;'''%(contact.phone_number, contact.user_id))
             else:
-               self.cursor.execute('''INSERT INTO clients(Id, username, first_name, phone_number) VALUES(%s, \'%s\', \'%s\', \'%s\');'''%(contact.user_id, username, contact.first_name, contact.phone_number))
-        return None
+               self.cursor.execute('''INSERT INTO client(id, username, first_name, phone_number) VALUES(%s, \'%s\', \'%s\', \'%s\');'''%(contact.user_id, username, contact.first_name, contact.phone_number))
+            self.connection.commit()
+            return None
+        except Exception as e:
+            print("Ошибка set_client_phone: %s" %str(e))          
 
     # Записываем заказ. 
     def set_order (self, id, idclient, cur, rate, vector, volume, summa, confirm):
@@ -88,33 +98,21 @@ class PSQLighter:
             print("Ошибка set_order: %s" %str(e))                      
         
 
-    def get_order_string(self, id, tobar = 0):
+    def get_order_string(self, id):
         try:
-            with self.connection:
-                cursor = self.connection.cursor()
-                # Текст заказа для клиrента
-                if tobar == 0:
-                    cursor.execute('''SELECT Item, Vol, OrderTime   FROM orders where Id = %s;'''%(id))
-                    res = cursor.fetchone()
-                    if res[1] is None:
-                        r1 = ''
-                    else:
-                        r1 = res[1]
-                    return res[0] + ', ' + r1 + ', ' + res[2]
-    
-                # Текст заказа для баристы
-                elif tobar == 1:
-                    res = cursor.execute('''SELECT Item, Vol, OrderTime, Clients.first_name, orders.Id FROM Orders LEFT JOIN Clients ON orders.IdClient = Clients.Id where Orders.Id  = %s;'''%(id))
-                    res = cursor.fetchone()
-                    if res[1] is None:
-                        r1 = ''
-                    else:
-                        r1 = res[1]
-    
-                    if res is not None:
-                        return '# ' + str(res[4]) + ' Name: ' + res[3]+ ', ' + res[0] + ', ' + r1 + ', ' + res[2]
-                else:
-                    return None
+            vector = self.get_column(id, 4)
+            cur = self.get_column(id, 2)
+            rate = self.get_column(id, 3)
+            summa = self.get_column(id, 6)
+            volume = self.get_column(id, 5)
+            
+            if vector is not None:
+                vector_str = 'купить ' if vector == 1 else 'продать '
+
+            if (vector is not None) and (cur is not None) and (rate is not None) and (summa is not None) and (volume is not None):
+                return 'Вы решили ' + vector_str + str(volume) + cur  + ' по ' + str(rate) + ' на сумму: ' + str(summa) + ' рублей. '
+            else:
+                return None
         except Exception as e:
             print("Ошибка get_order_string : %s" %str(e))  
         
@@ -135,9 +133,9 @@ class PSQLighter:
         :param id: Id заказа.
         """
         try:
-            with self.connection:
-                if (id is not None):
-                   self.cursor.execute('''DELETE FROM Orders where Id = %s;'''%(id))
+            if (id is not None):
+               self.cursor.execute('''DELETE FROM orders where id = %s;'''%(id))
+               self.connection.commit() 
             return None     
         except Exception as e:
             print("Ошибка del_order : %s" %str(e))          

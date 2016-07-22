@@ -14,7 +14,7 @@
     \q
 
 # Входим в оболочку под созданным полдьзователем. 
-psql -h localhost ratedb ratedb_user
+    psql -h localhost ratedb ratedb_user
 
 # Создаем таблицы
     CREATE SEQUENCE client_ids;
