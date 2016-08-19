@@ -28,8 +28,8 @@ Status_OfferSandwich = 61 # Выбраны сэндвич + капучино // 
 
 
 #Настройки веб-сервера.
-WEBHOOK_HOST = 'rateexc-jashilko.c9users.io'
-#WEBHOOK_HOST = 'cofbot.herokuapp.com'
+#WEBHOOK_HOST = 'rateexc-jashilko.c9users.io'
+WEBHOOK_HOST = 'rateexc.herokuapp.com'
 WEBHOOK_PORT = 80  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
