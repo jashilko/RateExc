@@ -1,0 +1,7 @@
+pytelegrambotapi
+requests
+flask
+psycopg2
+dj_database_url
+ftplib
+bs4

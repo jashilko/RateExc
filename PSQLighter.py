@@ -18,10 +18,10 @@ class PSQLighter:
         try:
             #Строка для Cloud9
             #database = "dbname=ratedb user=ratedb_user password=qwerty host=localhost port=5432"
-            database = "dbname=ratedb user=ratedb_user password=qwerty host=localhost port=5432"
+            #database = "dbname=ratedb user=ratedb_user password=qwerty host=localhost port=5432"
             
             # Строка для heroku
-            #database = "dbname=dcpuk30ncm8l9i user=uxwkaztpfcmjos password=9IzK-mqlx80bZ7WBTJUW3V9qEW host=ec2-204-236-228-133.compute-1.amazonaws.com port=5432"
+            database = "dbname=dae9nsl1dfqh32 user=szxsyhjzpwbkmo password=mifWYIaqV44RFK8w8e-vJEJs3c host=ec2-54-243-203-87.compute-1.amazonaws.com port=5432"
             self.connection = psycopg2.connect(database)
             self.cursor = self.connection.cursor()
             self.connection.set_client_encoding('UTF8')

@@ -23,4 +23,11 @@
     CREATE SEQUENCE order_ids;
     CREATE TABLE orders (id INTEGER PRIMARY KEY DEFAULT NEXTVAL('order_ids'), idclient INTEGER, cur VARCHAR(3), rate MONEY, VECTOR CHAR(5), volume INTEGER, summa MONEY, confirm SMALLINT);
     CREATE TABLE orders (id INTEGER PRIMARY KEY DEFAULT NEXTVAL('order_ids'), idclient INTEGER, cur VARCHAR(3), rate NUMERIC, VECTOR integer, volume INTEGER, summa numeric, confirm SMALLINT, ordertime timestamp);
+    
+    
+# Узнаем структуру БД
+    SELECT column_name, column_default, data_type 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE table_name = 'client';
+
 
