@@ -276,6 +276,8 @@ def end_dialog(message):
             bot.send_message(message.chat.id, 'Вам необходимо прийти в банк в течение суток для завершения заказа, иначе он будет аннулирован. '
                                                   'Если вы хотите отменить заказ '
                                                   'нажмите кнопку "Отмена!"', reply_markup=markup)
+        id = utils.get_storage(shelve_orderid, message.from_user.id)
+        db_worker.set_order(id, message.from_user.id, None, None, None, None, None, 0)
         db_worker.close()
         utils.del_storage(shelve_orderid, message.chat.id)
         utils.del_storage(shelve_status, message.chat.id)            

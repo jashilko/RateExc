@@ -3,6 +3,9 @@ token = '233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8' # Токер реаль�
 Удаляем ставим хуки боту
 https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWebhook
 https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWebhook?url=https://rateexc-jashilko.c9users.io/bot
+https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWebhook?url=https://rateexc.herokuapp.com/botq
+
+
 
 Заливка на heroku
 
@@ -10,5 +13,18 @@ https://api.telegram.org/bot233444946:AAFMuF8yt0djxpvDAgICS2olByy8xHbtLQ8/setWeb
 git add .
 git commit -am "Заменяем токен с тестового на реальный" "Заменяем токен с тестового на реальный"
 git push
+git push heroku master
 heroku logs
 heroku logs --tail
+
+
+Запуск приложения. 
+heroku ps:scale web=1
+
+qweqw
+
+heroku git:remote -a rateexc
+set git remote heroku to https://git.heroku.com/rateexc.git
+
+
+heroku ps
