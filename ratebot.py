@@ -62,7 +62,25 @@ def handle_contact(message):
 # Handle '/start'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, 'Привет!')
+    try:
+        f = open('start_command.txt')
+        filetostr = f.read()
+        f.close()
+        bot.send_message(message.chat.id, filetostr)
+    except Exception as e:
+        print("Ошибка commands=menu : %s" %str(e))    
+
+# Handle '/help'
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    try:
+        f = open('help_command.txt')
+        filetostr = f.read()
+        f.close()
+        bot.send_message(message.chat.id, filetostr)
+    except Exception as e:
+        print("Ошибка commands=menu : %s" %str(e))    
+
     
 # Handle '/getrate'
 @bot.message_handler(commands=['getrate'])
@@ -92,7 +110,7 @@ def read_message(message):
     db_worker = PSQLighter()
     
     # Проверяем, не нажал ли пользователь "Отмену!"
-    if message.text == 'Отмена!':
+    if message.text == 'Отмена!' or message.text == 'Ok!':
         try:
             # Удаляем запись в БД, записи в обоих хранилищах.
             if (utils.get_storage(shelve_orderid, message.chat.id) is not None):
@@ -168,9 +186,9 @@ def read_message(message):
                 markup = generate_markup(Status_ShowSumma)
                 v = db_worker.get_column(id, 4)
                 if v == 0:
-                    bot.send_message(message.chat.id, 'Сумма за прожажу валюты: ' + str(summa)  + ' рублей', reply_markup=markup)  
+                    bot.send_message(message.chat.id, 'Сумма за прожажу валюты: ' + str(round(summa, 2))  + ' рублей', reply_markup=markup)  
                 else:
-                    bot.send_message(message.chat.id, 'Сумма за покупку валюты: ' + str(summa)  + ' рублей', reply_markup=markup)  
+                    bot.send_message(message.chat.id, 'Сумма за покупку валюты: ' + str(round(summa, 2))  + ' рублей', reply_markup=markup)  
                 
             else:
                 print("Вы ввели не число")
@@ -238,6 +256,7 @@ def generate_markup(what):
         markup.add(types.KeyboardButton('Не хочу'))
         markup.row('Отмена!')
     elif what == Status_EndDialog:
+        markup.row('Ok!')
         markup.row('Отмена!')
 
     return markup
@@ -257,7 +276,7 @@ def getrate(num = 0):
         if num > 0:
             return res[num + 1].string
         else:
-            return 'Продать\t' + 'Купить\n'+ '<b>USD:</b>\t' + res[2].string + '\t' + res[3].string + '\n' + '<b>EUR:</b>\t' + res[4].string + '\t' + res[5].string + '\n'
+            return 'Продать\t' + 'Купить\n'+ '<b>USD:</b>\t' + res[2].string + '\t' + res[3].string + '\n' + '<b>EUR:</b>\t' + res[4].string + '\t' + res[5].string + '\n' + 'Чтобы оформить заказ, нажмите одну из кнопок. Если просто хотели посмотреть текущий курс, нажмите Отмена'
     except Exception as e:
         print("Ошибка функции getrate : %s" %str(e))  
         return ''

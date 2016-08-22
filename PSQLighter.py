@@ -76,14 +76,14 @@ class PSQLighter:
             #Добавляем что.
             if (idclient is not None):
                 # Вставляем заказ
-                if (id is None) and (cur != '') and (rate != '') and (vector > -1):
+                if (id is None) and (cur != '') and (rate != '') and (confirm is None) and (vector > -1):
                     dt = datetime.now()
                     self.cursor.execute('''INSERT INTO orders(idclient, cur, rate, vector, ordertime) VALUES (%s, \'%s\', %s, %s, \'%s\') RETURNING id;'''%(idclient, cur, rate, vector, dt))
                     self.connection.commit()
                     id_of_new_row = self.cursor.fetchone()[0]
                     return id_of_new_row
                 # Добавляем сумму заказа
-                if (int(volume) > 0) and (id is not None):
+                if (confirm is None) and (int(volume) > 0) and (id is not None):
                     self.cursor.execute('''UPDATE orders SET volume = %s, summa = %s WHERE id = %s ;'''%(volume, summa, id))
                     self.connection.commit()
                     return id
